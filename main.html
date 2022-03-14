@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main window</title>
+</head>
+<body>
+    <h1>My todos</h1>
+
+    <!-- todos are to be passed inside this ul -->
+    <ul></ul>
+
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        const list = document.querySelector('ul'); // to DRY code
+        
+        // receiving todos from main app, and inserting inside li items as text nodes in JS dom.
+        ipcRenderer.on('todo:add', (event, todo) => {
+            //console.log(todo);
+            const li = document.createElement('li');
+            const text = document.createTextNode(todo);
+
+            li.appendChild(text);
+            list.appendChild(li); // DRY-ing code
+        });
+
+        // clearing the all todos from inside the ul
+        ipcRenderer.on('todo:clear', () => {
+            list.innerHTML = ''; // DRY-ing code
+        });
+        
+    </script>
+</body>
+</html>
